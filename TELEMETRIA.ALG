@@ -485,6 +485,23 @@ inicio
     fimse
 fimprocedimento
 
+// Bernado
+procedimento exibir_pilha()
+var
+    i: inteiro
+
+inicio
+    escreval("pilha de emergencia: ")
+    se (topo_pilha = 0) entao
+        escreval(" > Nenhum talhao na pilha de emergencia.")
+
+    senao
+        para i de topo_pilha ate 1 passo -1 faca
+            escreval(" > [", i, "] ID: ", vpilha[i].idTalhao, " | Umidade: ", vpilha[i].umidadePct, "% | Vol: ", vpilha[i].volAgua, "L | Status: ", vpilha[i].statusManejo)
+      fimpara
+   fimse
+fimprocedimento
+
 // Gustavo Salles
 procedimento processa_resposta()
 inicio
@@ -518,7 +535,7 @@ inicio
                 exibir_fila()
 
             caso ACAO_VISUALIZAR_PILHA_EMERGENCIA
-               // exibirPilha
+                exibir_pilha()
 
             caso ACAO_SAIR
                deveria_terminar <- verdadeiro
