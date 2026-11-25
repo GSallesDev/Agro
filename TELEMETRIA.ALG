@@ -222,6 +222,45 @@ inicio
    escreval(" > Cadastro concluido com sucesso.")
 fimprocedimento
 
+// Matheus S.
+procedimento modificar_dados()
+var 
+    x, talhao: inteiro
+    novaUmidade, novoVolume : real
+
+inicio
+    para x de 1 ate qtde faca
+        escreval("< talhao: ", vlista[x].idTalhao)
+        escreval("< umidade: ", vlista[x].umidadePct, "%")
+
+        se FLAG_TALHOES_OUTRAS_INFORMACOES entao
+            escreval("< volume de agua: ", vlista[x].volAgua, " litros")
+        fimse
+    fimpara
+
+    escreva(" < modificar:")
+    leia(talhao)
+
+    se (talhao >= 1) e (talhao <= qtde) entao
+        escreva(" < umidade do solo %")
+        leia(novaUmidade)
+
+        se FLAG_TALHOES_OUTRAS_INFORMACOES entao
+            escreva(" < novo volume de agua L")
+            leia(novoVolume)
+        fimse
+
+        vlista[talhao].umidadePct <- novaUmidade
+        vlista[talhao].volAgua <- novoVolume
+        vlista[talhao].statusManejo <- classificar(novaUmidade)
+
+        // NOTA: A pilha ainda não é atualizada.
+        escreval(" > modificacao realizada com sucesso.")
+    senao
+        escreval(" > talhao inexistente.")
+    fimse
+fimprocedimento
+
 // Gustavo Salles
 procedimento processa_resposta()
 inicio
@@ -234,7 +273,7 @@ inicio
                cadastrar_talhoes()
 
             caso ACAO_MODIFICAR_DADOS
-               // modificarDados
+               modificar_dados()
 
             caso ACAO_DESATIVAR_PIVOT
                // desativarPivo
