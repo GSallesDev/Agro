@@ -149,6 +149,8 @@ inicio
     escreval(ACAO_VISUALIZAR_TELEMETRIA, ": Visualizacao da fila de telemetria")
     escreval(ACAO_VISUALIZAR_PILHA_EMERGENCIA, ": Visualizacao da pilha de emergencia")
     escreval(ACAO_SAIR, ": Sair")
+
+    escreva(" < ")
 fimprocedimento
 
 // Gustavo Salles.
@@ -184,6 +186,49 @@ inicio
     //     fimenquanto
     // fimse
     
+fimprocedimento
+
+// Gustavo Salles
+funcao esta_ativo(id : inteiro) : logico
+var
+    atual : inteiro
+
+inicio
+   atual <- inicio_lista
+
+   // NOTA: Percorre a lista ate achar o no
+   // meio subotimo, mas funciona.
+   enquanto (atual <> NULO) e (atual <> id) faca
+      atual <- vlista[atual].prox
+   fimenquanto
+
+   retorne (atual = id)
+fimfuncao
+
+// Gustavo Salles
+procedimento remover_da_lista(id : inteiro)
+var
+    ant, atual : inteiro
+
+inicio
+   ant <- NULO
+   atual <- inicio_lista
+
+   enquanto (atual <> NULO) e (atual <> id) faca
+      ant <- atual
+      atual <- vlista[atual].prox
+   fimenquanto
+
+   // NOTA: encontra o anterior e o atual, 
+   // o proximo já esta contido na estrutura.
+   se atual = id entao
+      se ant = NULO entao
+         inicio_lista <- vlista[id].prox
+      senao
+         vlista[ant].prox <- vlista[id].prox
+      fimse
+      vlista[id].prox <- NULO
+   fimse
 fimprocedimento
 
 // Matheus S.
@@ -262,6 +307,51 @@ inicio
 fimprocedimento
 
 // Gustavo Salles
+procedimento desativar_pivo()
+var
+    talhao: inteiro
+
+inicio
+   escreva(" < desativar:")
+   leia(talhao)
+
+   se (talhao >= 1) e (talhao <= qtde) entao
+      se esta_ativo(talhao) entao
+         remover_da_lista(talhao)
+         escreval(" > pivo do talhao ", talhao, " desativado")
+      senao
+         Escreval(" > este pivo ja esta desativado.")
+      fimse
+
+   senao
+      Escreval(" > ERRO: talhao inexistente!")
+   fimse
+fimprocedimento
+
+// Gustavo Salles
+procedimento reativar_pivo()
+var 
+    talhao : inteiro
+
+inicio
+   escreva(" < reativar:")
+   leia(talhao)
+
+   se (talhao >= 1) e (talhao <= qtde) entao
+      se esta_ativo(talhao) entao
+         escreval(" > este pivo ja esta ativo.")
+
+      senao
+         inserir_na_lista(talhao)
+         escreval(" > pivo do talhao ", talhao, " reativado.")
+      fimse
+
+   senao
+      Escreval(" > ERRO: talhao inexistente.")
+   fimse
+fimprocedimento
+
+// Gustavo Salles
 procedimento processa_resposta()
 inicio
     se (resp <> ACAO_INSERIR_TALHOES) e (resp <> ACAO_SAIR) e (nao cadastrado) entao
@@ -270,16 +360,16 @@ inicio
         // A FAZER: Fazer uma formatacao melhor do codigo
         escolha resp
             caso ACAO_INSERIR_TALHOES
-               cadastrar_talhoes()
+                cadastrar_talhoes()
 
             caso ACAO_MODIFICAR_DADOS
-               modificar_dados()
+                modificar_dados()
 
             caso ACAO_DESATIVAR_PIVOT
-               // desativarPivo
+                desativar_pivo()
 
             caso ACAO_REATIVAR_PIVOT
-               // reativarPivo
+                reativar_pivo()
 
             caso ACAO_VISUALIZAR_LISTA_IRRIGACAO_ATIVA
                // exibirLista
