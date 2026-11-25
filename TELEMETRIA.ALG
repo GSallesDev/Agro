@@ -352,6 +352,44 @@ inicio
 fimprocedimento
 
 // Gustavo Salles
+procedimento exibir_lista()
+var
+    x: inteiro
+
+inicio
+    escreval("irrigacao: ")
+    se inicio_lista = NULO entao
+        escreval(" > nenhuma zona de irrigacao ativa.")
+
+    senao
+        x <- inicio_lista
+        enquanto x <> NULO faca
+        escreva(" > talhao: ", vlista[x].idTalhao)
+        se FLAG_TALHOES_OUTRAS_INFORMACOES entao
+            escreval(" | Cultura: ", vlista[x].cultura)
+        fimse
+
+        escreva(" > umidade: ", vlista[x].umidadePct, "%")
+        se FLAG_TALHOES_OUTRAS_INFORMACOES entao
+            escreva(" | Volume de agua: ", vlista[x].volAgua, " litros")
+        fimse
+
+        // NOTA: Nao é uma soluçao elegante, mas é suficiente.
+        // Se tiverem sugestoes, dicionario, etc.
+        se vlista[x].statusManejo = "E" entao
+            escreval(" | Status: Emergencia")
+
+        senao
+            escreval(" | Status: Normal")
+        fimse
+        escreval("----------------------")
+
+         x <- vlista[x].prox
+      fimenquanto
+   fimse
+fimprocedimento
+
+// Gustavo Salles
 procedimento processa_resposta()
 inicio
     se (resp <> ACAO_INSERIR_TALHOES) e (resp <> ACAO_SAIR) e (nao cadastrado) entao
@@ -372,7 +410,7 @@ inicio
                 reativar_pivo()
 
             caso ACAO_VISUALIZAR_LISTA_IRRIGACAO_ATIVA
-               // exibirLista
+                exibir_lista()
 
             caso ACAO_COLETAR_TELEMETRIA
                // droneColetar
