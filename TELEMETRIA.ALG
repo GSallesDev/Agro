@@ -438,6 +438,53 @@ inicio
     fimse
 fimprocedimento
 
+// Bernado
+// NOTA: Somenta talhoes ativos. A pilha é resetada.
+procedimento empilhar_emergencias()
+var
+    j: inteiro
+
+inicio
+   topo_pilha <- 0
+   j <- inicio_lista
+
+   enquanto j <> NULO faca
+      se (vlista[j].idTalhao <> 0) e (vlista[j].statusManejo = "E") e (vlista[j].umidadePct < LIMITE) entao
+         se (topo_pilha < MAX) entao
+            topo_pilha <- topo_pilha + 1
+            vpilha[topo_pilha] <- vlista[j]
+         fimse
+      fimse
+      j <- vlista[j].prox
+   fimenquanto
+fimprocedimento
+
+// Matheus S.
+// NOTA: A fila de telemetria, cria a pilha
+procedimento processar_fila()
+var
+    id: inteiro
+
+inicio
+    se final < topo entao
+        escreval(" > nada a processar.")
+
+    senao
+        enquanto topo <= final faca
+            id <- vfila[topo].idTalhao
+            vlista[id].statusManejo <- vfila[topo].statusManejo
+            topo <- topo + 1
+        fimenquanto
+
+        // fila esvaziada, reinicia os indices
+        topo <- 1
+        final <- 0
+
+        empilhar_emergencias()
+        escreval(" > fila processada.")
+    fimse
+fimprocedimento
+
 // Gustavo Salles
 procedimento processa_resposta()
 inicio
@@ -465,7 +512,7 @@ inicio
                 drone_coletar()
 
             caso ACAO_PROCESSAR_TELEMETRIA
-                // processar_fila
+                processar_fila()
 
             caso ACAO_VISUALIZAR_TELEMETRIA
                 exibir_fila()
