@@ -6,25 +6,94 @@ algoritmo "telemetria"
 //   - Gustavo Salles
 // Data atual  : 25/11/2026
 
-var
-   talhoes_variaveis: logico
-   deveria_terminar: logico
-   cadastrado: logico
 
-   qtde, resp: inteiro
+// Convensao status E/N - Matheus S.
+
+tipo
+    // Matheus S.
+    Telemetria = registro
+        idTalhao : inteiro
+        cultura : caractere
+        umidadePct : real
+        volAgua : real
+        statusManejo : caractere   // "E" = emergencia | "N" = normal
+        prox : inteiro
+    fimregistro
+
+var
+    DEPURAR: logico
+    MAX, NULO : inteiro
+    LIMITE : real
+
+    // NOTA: o visualg requer que os vetores tenham um tamanho fixo.
+    // então coloquei MAX = 15, sei lá, se precisar pode aumentar
+    // mas tem que atualizar a variavel MAX, de acordo.
+    vpilha, vlista, vfila : vetor[1..15] de Telemetria
+
+    FLAG_TALHOES_VARIAVEIS: logico
+    FLAG_TALHOES_OUTRAS_INFORMACOES: logico
+
+    deveria_terminar: logico
+    cadastrado: logico
+
+    qtde, resp: inteiro
 
     ACAO_INSERIR_TALHOES, ACAO_MODIFICAR_DADOS, ACAO_DESATIVAR_PIVOT, ACAO_REATIVAR_PIVOT, ACAO_VISUALIZAR_LISTA_IRRIGACAO_ATIVA, ACAO_COLETAR_TELEMETRIA, ACAO_PROCESSAR_TELEMETRIA, ACAO_VISUALIZAR_TELEMETRIA, ACAO_VISUALIZAR_PILHA_EMERGENCIA, ACAO_SAIR: inteiro
 
+    topo, final : inteiro        // controle da fila FIFO
+    topo_pilha : inteiro         // controle da pilha LIFO
+    inicio_lista : inteiro       // cabeca da lista de irrigacao ativa
+
+// Gustavo Salles
+procedimento depurar_escreve(mensagem: caracter)
+inicio
+    se DEPURAR entao
+        escreval(mensagem)
+    fimse
+fimprocedimento
+
+// Gustavo Salles
+// Matheus S.
+procedimento reiniciar_estruturas()
+inicio
+    inicio_lista <- NULO
+    topo <- 1
+    final <- 0
+    topo_pilha <- 0
+    // depurar_escreve(" > reiniciar_estruturas()")
+fimprocedimento
+
+// Matheus S. (adaptado)
+funcao classificar(u : real) : caractere
+inicio
+   se u < LIMITE entao
+      retorne "E"
+   senao
+      retorne "N"
+   fimse
+fimfuncao
+
+// ---------------------------------------------------------------
+// TLDR; IDK, F This shit.
 
 // Gustavo Salles
 procedimento inicializa() 
 inicio
-    talhoes_variaveis <- falso
+    DEPURAR <- verdadeiro
+    MAX <- 15
+    NULO <- 0
+    LIMITE <- 25.0
+
+    FLAG_TALHOES_VARIAVEIS <- falso
+    FLAG_TALHOES_OUTRAS_INFORMACOES <- verdadeiro
+
     deveria_terminar <- falso
     cadastrado <- falso
 
+    reiniciar_estruturas()
+
     // NOTA: Acho que era 5 talhoes, mas vou deixar 3 talhoes como padrao
-    // caso talhoes_variaveis esteja desativado, caso contrario o sistema
+    // caso FLAG_TALHOES_VARIAVEIS esteja desativado, caso contrario o sistema
     // lerá normalmenete.
     qtde <- 3
 
@@ -55,9 +124,9 @@ inicio
     ate (qtde <= 15) e (qtde > 0)
 fimprocedimento
 
-// Gustavo Salles
 // Bernado
 // Matheus S.
+// Gustavo Salles
 // May
 procedimento exibir_menu()
 inicio
@@ -82,6 +151,77 @@ inicio
     escreval(ACAO_SAIR, ": Sair")
 fimprocedimento
 
+// Gustavo Salles.
+procedimento inserir_na_lista(id : inteiro)
+    var ant, atual: inteiro
+inicio
+    ant <- NULO
+    atual <- inicio_lista
+
+    // Encontra (anterior e atual)
+    enquanto (atual <> NULO) e (atual < id) faca
+        ant <- atual
+        atual <- vlista[atual].prox
+    fimenquanto
+
+    // Concatena (link de zelda para epona)
+    se atual <> id entao
+        vlista[id].prox <- atual
+        se ant = NULO entao
+            inicio_lista <- id
+
+        senao
+            vlista[ant].prox <- id
+        fimse
+    fimse
+
+    // se DEPURAR entao
+    //     atual <- inicio_lista
+    //     enquanto (atual <> NULO) faca
+    //         ant <- atual
+    //         atual <- vlista[atual].prox
+    //         escreval(ant, " -> ", atual)
+    //     fimenquanto
+    // fimse
+    
+fimprocedimento
+
+// Matheus S.
+procedimento cadastrar_talhoes()
+var 
+    x: inteiro
+inicio
+    reiniciar_estruturas()
+
+    // A FAZER: Separa o codigo que se repete em procedimento a parte.
+    para x de 1 ate qtde faca
+        escreval(" > talhao", x)
+        vlista[x].idTalhao <- x
+
+        escreval("Informe a umidade do solo (%)")
+        escreva(" < ")
+        leia(vlista[x].umidadePct)
+
+        se FLAG_TALHOES_OUTRAS_INFORMACOES entao
+            escreval("Informe a cultura")
+            escreva(" < ")
+            leia(vlista[x].cultura)
+ 
+            escreval("Informe o volume de agua L")
+            escreva(" < ")
+            leia(vlista[x].volAgua)
+        fimse
+
+        vlista[x].statusManejo <- classificar(vlista[x].umidadePct)
+
+        vlista[x].prox <- NULO
+        inserir_na_lista(x)
+   fimpara
+
+   cadastrado <- verdadeiro
+   escreval(" > Cadastro concluido com sucesso.")
+fimprocedimento
+
 // Gustavo Salles
 procedimento processa_resposta()
 inicio
@@ -91,7 +231,7 @@ inicio
         // A FAZER: Fazer uma formatacao melhor do codigo
         escolha resp
             caso ACAO_INSERIR_TALHOES
-               // cadastrarTalhoes
+               cadastrar_talhoes()
 
             caso ACAO_MODIFICAR_DADOS
                // modificarDados
@@ -126,6 +266,7 @@ inicio
       fimse
 fimprocedimento
 
+// Gustavo Salles
 procedimento sistema_loop()
 inicio
     repita
@@ -137,7 +278,7 @@ fimprocedimento
 
 inicio
     inicializa()
-    se talhoes_variaveis entao 
+    se FLAG_TALHOES_VARIAVEIS entao 
         regitra_quantidade_talhoes()
     fimse
 
