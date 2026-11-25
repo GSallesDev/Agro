@@ -1,6 +1,6 @@
 algoritmo "telemetria"
 // Autores:
-//   - May
+//   - Mayara
 //   - Bernado
 //   - Matheus S.
 //   - Gustavo Salles
@@ -124,7 +124,7 @@ fimprocedimento
 // Bernado
 // Matheus S.
 // Gustavo Salles
-// May
+// Mayara
 procedimento exibir_menu()
 inicio
     // Matheus
