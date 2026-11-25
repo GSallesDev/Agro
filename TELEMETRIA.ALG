@@ -73,9 +73,6 @@ inicio
    fimse
 fimfuncao
 
-// ---------------------------------------------------------------
-// TLDR; IDK, F This shit.
-
 // Gustavo Salles
 procedimento inicializa() 
 inicio
