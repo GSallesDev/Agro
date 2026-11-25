@@ -389,6 +389,55 @@ inicio
    fimse
 fimprocedimento
 
+// Matheus S.
+procedimento drone_coletar
+var 
+    // NOTA: posicao atual do drone
+    // drone em talhao x
+    em_talhao : inteiro
+
+inicio
+    em_talhao <- inicio_lista
+    enquanto em_talhao <> NULO faca
+        se final < MAX entao
+            // NOTA: Enfilera o pacote da telemetria, no final da fila. FIFO
+            final <- final + 1
+            vfila[final] <- vlista[em_talhao]
+            vfila[final].prox <- NULO
+            vfila[final].statusManejo <- classificar(vlista[em_talhao].umidadePct)
+
+        senao
+            escreval(" > Fila esta cheia cheia. Processe a fila opcao.", ACAO_PROCESSAR_TELEMETRIA)
+        fimse
+
+        em_talhao <- vlista[em_talhao].prox
+   fimenquanto
+   escreval("> coleta de telemetrias do drone concluida.")
+fimprocedimento
+
+// Matheus S.
+// Gustavo Salles
+procedimento exibir_fila()
+var 
+    x: inteiro
+
+inicio
+    escreval("fila telemetria")
+    se final < topo entao
+        escreval("Fila vazia!")
+
+    senao
+        para x de topo ate final faca
+            escreval(" > posicao na fila: ", x)
+            escreval(" > talhao: ", vfila[x].idTalhao)
+            escreval(" > umidade: ", vfila[x].umidadePct, "%")
+            escreval(" > volume de agua: ", vfila[x].volAgua, " litros")
+            escreval(" > status: ", vfila[x].statusManejo)
+            escreval("----------------------")
+        fimpara
+    fimse
+fimprocedimento
+
 // Gustavo Salles
 procedimento processa_resposta()
 inicio
@@ -413,13 +462,13 @@ inicio
                 exibir_lista()
 
             caso ACAO_COLETAR_TELEMETRIA
-               // droneColetar
+                drone_coletar()
 
             caso ACAO_PROCESSAR_TELEMETRIA
-               // processarFila
+                // processar_fila
 
             caso ACAO_VISUALIZAR_TELEMETRIA
-               // exibirFila
+                exibir_fila()
 
             caso ACAO_VISUALIZAR_PILHA_EMERGENCIA
                // exibirPilha
