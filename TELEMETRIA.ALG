@@ -89,10 +89,9 @@ inicio
 
     reiniciar_estruturas()
 
-    // NOTA: Acho que era 5 talhoes, mas vou deixar 3 talhoes como padrao
-    // caso FLAG_TALHOES_VARIAVEIS esteja desativado, caso contrario o sistema
+    // NOTA: caso FLAG_TALHOES_VARIAVEIS esteja desativado, caso contrario o sistema
     // lerá normalmenete.
-    qtde <- 3
+    qtde <- 5
 
     ACAO_INSERIR_TALHOES <- 1
     ACAO_MODIFICAR_DADOS <- 2
