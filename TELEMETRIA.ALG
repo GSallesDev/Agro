@@ -1,7 +1,7 @@
 algoritmo "telemetria"
 // Autores:
 //   - Mayara
-//   - Bernado
+//   - Bernardo
 //   - Matheus S.
 //   - Gustavo Salles
 // Data atual  : 25/11/2026
@@ -115,12 +115,12 @@ inicio
         leia(qtde)
 
         se (qtde > 15) ou (qtde <= 0) entao
-            Escreval("ERROR: Quantidade invalida")
+            escreval("ERROR: Quantidade invalida")
         fimse
     ate (qtde <= 15) e (qtde > 0)
 fimprocedimento
 
-// Bernado
+// Bernardo
 // Matheus S.
 // Gustavo Salles
 // Mayara
@@ -141,7 +141,7 @@ inicio
 
     escreval(ACAO_PROCESSAR_TELEMETRIA, ": Processar fila de telemetria")
 
-    // Gustavo Salles (adaptado do codigo do Bernado)
+    // Gustavo Salles (adaptado do codigo do Bernardo)
     escreval(ACAO_VISUALIZAR_TELEMETRIA, ": Visualizacao da fila de telemetria")
     escreval(ACAO_VISUALIZAR_PILHA_EMERGENCIA, ": Visualizacao da pilha de emergencia")
     escreval(ACAO_SAIR, ": Sair")
@@ -360,29 +360,29 @@ inicio
     senao
         x <- inicio_lista
         enquanto x <> NULO faca
-        escreva(" > talhao: ", vlista[x].idTalhao)
-        se FLAG_TALHOES_OUTRAS_INFORMACOES entao
-            escreval(" | Cultura: ", vlista[x].cultura)
-        fimse
+            escreva(" > talhao: ", vlista[x].idTalhao)
+            se FLAG_TALHOES_OUTRAS_INFORMACOES entao
+                escreval(" | Cultura: ", vlista[x].cultura)
+            fimse
 
-        escreva(" > umidade: ", vlista[x].umidadePct, "%")
-        se FLAG_TALHOES_OUTRAS_INFORMACOES entao
-            escreva(" | Volume de agua: ", vlista[x].volAgua, " litros")
-        fimse
+            escreva(" > umidade: ", vlista[x].umidadePct, "%")
+            se FLAG_TALHOES_OUTRAS_INFORMACOES entao
+                escreva(" | Volume de agua: ", vlista[x].volAgua, " litros")
+            fimse
 
-        // NOTA: Nao é uma soluçao elegante, mas é suficiente.
-        // Se tiverem sugestoes, dicionario, etc.
-        se vlista[x].statusManejo = "E" entao
-            escreval(" | Status: Emergencia")
+            // NOTA: Nao é uma soluçao elegante, mas é suficiente.
+            // Se tiverem sugestoes, dicionario, etc.
+            se vlista[x].statusManejo = "E" entao
+                escreval(" | Status: Emergencia")
 
-        senao
-            escreval(" | Status: Normal")
-        fimse
-        escreval("----------------------")
+            senao
+                escreval(" | Status: Normal")
+            fimse
+            escreval("----------------------")
 
-         x <- vlista[x].prox
-      fimenquanto
-   fimse
+            x <- vlista[x].prox
+        fimenquanto
+    fimse
 fimprocedimento
 
 // Matheus S.
@@ -434,7 +434,7 @@ inicio
     fimse
 fimprocedimento
 
-// Bernado
+// Bernardo
 // NOTA: Somenta talhoes ativos. A pilha é resetada.
 procedimento empilhar_emergencias()
 var
@@ -481,7 +481,7 @@ inicio
     fimse
 fimprocedimento
 
-// Bernado
+// Bernardo
 procedimento exibir_pilha()
 var
     i: inteiro
